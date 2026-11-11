@@ -236,7 +236,7 @@ function vDone(){
   const msgs=['Estás a arrasar!','Que orgulho!','Mais um feito!','Excelente trabalho!'];
   return `<div class="done"><div class="em">🏆</div><h1>${msgs[D.history.length%msgs.length]}</h1>
   <p class="muted">Treino de ${w.name} concluído.</p>
-  <div class="stats"><div><b>${h.dur}</b>minutos</div><div><b>${w.rounds}</b>voltas</div><div><b>${D.history.filter(x=>Date.now()-new Date(x.d)<7*864e5).length}</b>esta semana</div></div>
+  <div class="stats"><div><b>${h.dur}</b>${h.dur===1?"minuto":"minutos"}</div><div><b>${w.rounds}</b>voltas</div><div><b>${D.history.filter(x=>Date.now()-new Date(x.d)<7*864e5).length}</b>esta semana</div></div>
   <button class="big" data-a="home">Voltar ao início</button></div>`;
 }
 function vList(){
