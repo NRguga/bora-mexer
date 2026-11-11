@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ff4f6d">
+<title>Bora Mexer!</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Bora Mexer!">
+<style>
+:root{--bg:#fff6ef;--card:#ffffff;--ink:#1f1a2e;--muted:#6f6a7d;--coral:#ff4f6d;--orange:#ff9f1c;--teal:#00b4a6;--purple:#7b2ff7;--yellow:#ffd23f;--line:#f0e3da;--r:22px}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+body{padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+main{max-width:560px;margin:0 auto;padding:16px 16px 40px}
+button{font:inherit;cursor:pointer}
+.top{display:flex;justify-content:space-between;align-items:center;margin:6px 0 4px}
+.logo{font-size:30px;font-weight:900;letter-spacing:-.5px;background:linear-gradient(90deg,var(--coral),var(--orange));-webkit-background-clip:text;background-clip:text;color:transparent}
+.iconbtn{background:#fff;border:2px solid var(--line);border-radius:14px;width:46px;height:46px;font-size:22px}
+.hello{font-size:21px;margin:4px 0 16px;color:var(--muted)}
+.wcard{position:relative;border:0;width:100%;text-align:left;color:#fff;border-radius:var(--r);padding:22px 20px;margin-bottom:14px;box-shadow:0 10px 24px rgba(255,79,109,.25);overflow:hidden}
+.wcard.pernas{background:linear-gradient(135deg,#ff4f6d,#ff9f1c)}
+.wcard.bracos{background:linear-gradient(135deg,#7b2ff7,#00b4a6);box-shadow:0 10px 24px rgba(123,47,247,.25)}
+.wcard .em{font-size:44px;line-height:1}.wcard h2{font-size:28px;margin:8px 0 2px}.wcard p{margin:0;opacity:.95;font-size:16px}
+.wcard .go{display:inline-block;margin-top:14px;background:#fff;color:var(--ink);font-weight:800;padding:10px 18px;border-radius:99px;font-size:17px}
+.wcard .peek{position:absolute;right:14px;bottom:14px;background:rgba(255,255,255,.22);color:#fff;border:0;border-radius:99px;padding:8px 14px;font-size:15px;font-weight:700}
+.card{background:var(--card);border-radius:var(--r);padding:16px;margin-bottom:14px;border:2px solid var(--line)}
+.week{display:flex;justify-content:space-between;margin-top:10px}
+.day{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:13px;color:var(--muted);font-weight:700}
+.dot{width:36px;height:36px;border-radius:50%;background:#f3e9e2;display:flex;align-items:center;justify-content:center;font-size:18px}
+.dot.on{background:var(--teal);color:#fff}.dot.today{outline:3px solid var(--yellow)}
+h3{margin:0;font-size:19px}
+.muted{color:var(--muted)}.small{font-size:15px}
+/* run screen */
+.runhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.prog{flex:1;height:10px;background:#f1e2d8;border-radius:99px;overflow:hidden}.prog i{display:block;height:100%;background:linear-gradient(90deg,var(--coral),var(--orange));border-radius:99px;transition:width .3s}
+.badge{display:inline-block;background:var(--yellow);color:var(--ink);font-weight:800;border-radius:99px;padding:4px 12px;font-size:15px}
+.photo{position:relative;border-radius:var(--r);overflow:hidden;background:#222;aspect-ratio:3/2;margin:10px 0 12px}
+.photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.photo img.f2{animation:flip 2.6s infinite}
+@keyframes flip{0%,42%{opacity:0}50%,92%{opacity:1}100%{opacity:0}}
+.photo .lbl{position:absolute;left:10px;top:10px;background:rgba(0,0,0,.55);color:#fff;font-size:13px;padding:4px 10px;border-radius:99px;font-weight:700}
+.exname{font-size:30px;font-weight:900;margin:2px 0 6px;line-height:1.15}
+.reps{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.reps b{font-size:46px;color:var(--coral);line-height:1}.reps span{font-size:20px;font-weight:700}
+.kg{display:flex;gap:10px;margin:12px 0}
+.kg button{flex:1;border:3px solid var(--line);background:#fff;border-radius:16px;padding:10px;font-weight:800;font-size:18px}
+.kg button.on{border-color:var(--purple);background:#f1e8ff;color:var(--purple)}
+ol.steps{padding-left:22px;margin:8px 0}ol.steps li{margin:6px 0}
+.tip{background:#fff4cc;border-radius:16px;padding:10px 14px;font-size:16px;margin-top:8px}
+.counter{width:100%;border:3px dashed var(--teal);background:#e8fbf9;color:#007a71;border-radius:18px;padding:12px;font-weight:800;font-size:18px;margin-top:12px}
+.big{width:100%;border:0;border-radius:22px;padding:20px;font-size:24px;font-weight:900;color:#fff;background:linear-gradient(135deg,var(--teal),#14d39a);box-shadow:0 10px 22px rgba(0,180,166,.3);margin-top:14px}
+.ghost{width:100%;border:2px solid var(--line);background:#fff;border-radius:18px;padding:14px;font-size:18px;font-weight:700;margin-top:10px;color:var(--ink)}
+.link{background:none;border:0;color:var(--muted);font-weight:700;padding:8px;font-size:16px}
+/* rest */
+.rest{text-align:center}
+.ring{width:230px;height:230px;margin:14px auto 6px;position:relative}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring .t{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring .t b{font-size:64px;font-weight:900;font-variant-numeric:tabular-nums}
+.next{display:flex;gap:12px;align-items:center;text-align:left;background:#fff;border:2px solid var(--line);border-radius:var(--r);padding:10px;margin-top:14px}
+.next img{width:110px;height:76px;object-fit:cover;border-radius:14px}
+.row2{display:flex;gap:10px}.row2>*{flex:1}
+/* done */
+.done{text-align:center;padding-top:30px}.done .em{font-size:90px}
+.done h1{font-size:34px;margin:10px 0}
+.stats{display:flex;gap:10px;margin:18px 0}.stats div{flex:1;background:#fff;border:2px solid var(--line);border-radius:18px;padding:12px}.stats b{display:block;font-size:26px;color:var(--coral)}
+/* list */
+.exrow{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:2px solid var(--line)}.exrow:last-child{border:0}
+.exrow img{width:96px;height:66px;object-fit:cover;border-radius:12px;flex:none}
+.hist{display:flex;justify-content:space-between;padding:10px 0;border-bottom:2px solid var(--line)}.hist:last-child{border:0}
+.modal{position:fixed;inset:0;background:rgba(31,26,46,.55);display:flex;align-items:center;justify-content:center;padding:20px;z-index:20}
+.modal .box{background:#fff;border-radius:24px;padding:20px;max-width:420px;width:100%}
+.toggle{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:2px solid var(--line)}
+.toggle:last-child{border:0}
+select{font:inherit;font-size:17px;padding:8px;border-radius:12px;border:2px solid var(--line);background:#fff}
+.credit{font-size:12.5px;color:var(--muted);text-align:center;margin-top:20px}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<div id="modal"></div>
+<script>
+/* ===================== Treinos ===================== */
+const WORKOUTS = {
+  pernas:{name:'Pernas',emoji:'🦵',cls:'pernas',rounds:2,sub:'6 exercícios · 2 voltas · sem halteres',ex:[
+    {id:'joelho-peito',name:'Joelho ao peito',reps:20,unit:'vezes',note:'alterna as pernas',imgs:1,
+     steps:['De pé, com as costas direitas.','Sobe um joelho em direção ao peito.','Baixa e sobe o outro joelho.'],
+     tip:'Se precisares, apoia uma mão numa cadeira para ter equilíbrio.'},
+    {id:'calcanhar-rabo',name:'Calcanhar ao rabo',reps:20,unit:'vezes',note:'alterna as pernas',imgs:2,
+     steps:['De pé, com os pés à largura da anca.','Dobra um joelho e leva o calcanhar em direção ao rabo.','Volta a pousar e troca de perna.'],
+     tip:'Os joelhos ficam apontados para o chão. Vai ao teu ritmo.'},
+    {id:'agachamento',name:'Agachamento',reps:10,unit:'vezes',imgs:2,
+     steps:['Pés à largura dos ombros, pontas ligeiramente para fora.','Leva o rabo para trás e para baixo, como se te fosses sentar numa cadeira.','Desce só até onde for confortável e sobe a empurrar o chão com os calcanhares.'],
+     tip:'Põe uma cadeira atrás de ti para te dar segurança. Os joelhos acompanham a direção dos pés.'},
+    {id:'joelho-chao',name:'Joelho ao chão',reps:10,unit:'vezes',note:'alterna as pernas',imgs:2,
+     steps:['De pé, dá um passo grande para trás com uma perna.','Desce devagar até o joelho de trás quase tocar no chão.','Empurra com a perna da frente para voltar a ficar de pé e troca de perna.'],
+     tip:'Na foto usa halteres, mas tu fazes sem nada. Mantém o tronco direito e apoia-te numa cadeira se precisares.'},
+    {id:'elevacao-pelvica',name:'Elevação pélvica',reps:20,unit:'vezes',imgs:2,
+     steps:['Deitada de costas, joelhos dobrados e pés no chão.','Sobe a anca, apertando o rabo, até o corpo ficar em linha dos ombros aos joelhos.','Fica 1 segundo lá em cima e desce devagar.'],
+     tip:'Os braços ficam pousados no chão ao lado do corpo. Não arqueies as costas.'},
+    {id:'escadas',name:'Escadas',reps:2,unit:'vezes',note:'subir e descer',imgs:2,
+     steps:['Vai até às escadas de casa (ou a um degrau firme).','Sobe e desce o lanço de escadas a um ritmo confortável.','Repete 2 vezes.'],
+     tip:'Segura sempre o corrimão e pousa o pé inteiro no degrau. Na foto usa halteres, tu fazes sem nada.'}
+  ]},
+  bracos:{name:'Braços',emoji:'💪',cls:'bracos',rounds:2,sub:'5 exercícios · 2 voltas · halteres 1,5 e 3,5 kg',ex:[
+    {id:'flexoes',name:'Flexões na mesa',reps:10,unit:'vezes',imgs:2,
+     steps:['Mãos na beira de uma mesa firme ou bancada, um pouco mais afastadas que os ombros.','Dá uns passos atrás até o corpo ficar inclinado e direito.','Dobra os cotovelos para levar o peito à mesa e empurra para voltar.'],
+     tip:'Mais fácil: faz com as mãos na parede. Mais difícil: num sofá ou cadeira encostada à parede.'},
+    {id:'remada',name:'Remada com halteres',reps:12,unit:'vezes',kg:3.5,imgs:2,
+     steps:['Um halter em cada mão, joelhos ligeiramente dobrados.','Inclina o tronco para a frente com as costas direitas.','Puxa os halteres em direção à barriga, com os cotovelos junto ao corpo, e desce devagar.'],
+     tip:'As costas ficam sempre direitas, nunca curvadas. Olha para o chão, um pouco à frente.'},
+    {id:'press-ombros',name:'Press de ombros',reps:10,unit:'vezes',kg:1.5,imgs:2,
+     steps:['Sentada numa cadeira, com as costas apoiadas.','Halteres à altura dos ombros, palmas para a frente.','Empurra para cima até os braços ficarem quase esticados e desce devagar.'],
+     tip:'Não encolhas os ombros. Se custar muito, faz um braço de cada vez.'},
+    {id:'curl',name:'Bíceps',reps:12,unit:'vezes',kg:3.5,imgs:2,
+     steps:['De pé, braços esticados e palmas viradas para a frente.','Dobra os cotovelos e sobe os halteres até perto dos ombros.','Desce devagar até os braços ficarem esticados.'],
+     tip:'Os cotovelos ficam parados, encostados ao corpo. Não balances o tronco.'},
+    {id:'triceps',name:'Tríceps',reps:12,unit:'vezes',note:'em cada braço',kg:1.5,imgs:2,
+     steps:['Apoia uma mão e um joelho numa cadeira ou na cama, com as costas direitas.','Cotovelo do outro braço junto ao corpo, dobrado.','Estica o braço para trás e volta devagar. Faz um braço e depois o outro.'],
+     tip:'Só o antebraço se mexe. O cotovelo fica parado junto às costelas.'}
+  ]}
+};
+const KG_OPTS=[1.5,3.5];
+
+/* ===================== Estado ===================== */
+const LS='boramexer.v1';
+const D = Object.assign({history:[],kg:{},settings:{restEx:30,restRound:60,voice:true,sound:true},run:null}, load());
+let view = D.run ? 'run' : 'home', peek=null, ac=null, wake=null, lastBeep=null;
+function load(){try{return JSON.parse(localStorage.getItem(LS))||{}}catch(e){return {}}}
+function save(){try{localStorage.setItem(LS,JSON.stringify(D))}catch(e){}}
+try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
+const $=s=>document.querySelector(s);
+const kgTxt=k=>String(k).replace('.',',')+' kg';
+const img=(id,i)=>`img/${id}-${i}.jpg`;
+function photo(e,label){return `<div class="photo"><img src="${img(e.id,0)}" alt="${e.name}">${e.imgs>1?`<img class="f2" src="${img(e.id,1)}" alt="">`:''}${label?`<span class="lbl">${label}</span>`:''}</div>`;}
+
+/* ===================== Som, voz, ecrã ===================== */
+function audio(){try{const AC=window.AudioContext||window.webkitAudioContext;if(!ac&&AC)ac=new AC();if(ac&&ac.state==='suspended')ac.resume();}catch(e){}return ac;}
+function beep(f=880,d=.18,v=.35){if(!D.settings.sound)return;const a=audio();if(!a)return;try{const o=a.createOscillator(),g=a.createGain();o.frequency.value=f;g.gain.setValueAtTime(.0001,a.currentTime);g.gain.exponentialRampToValueAtTime(v,a.currentTime+.02);g.gain.exponentialRampToValueAtTime(.0001,a.currentTime+d);o.connect(g);g.connect(a.destination);o.start();o.stop(a.currentTime+d+.05);}catch(e){}}
+function say(t){if(!D.settings.voice||!('speechSynthesis' in window))return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='pt-PT';u.rate=.95;const v=speechSynthesis.getVoices().find(v=>v.lang==='pt-PT')||speechSynthesis.getVoices().find(v=>v.lang&&v.lang.startsWith('pt'));if(v)u.voice=v;speechSynthesis.speak(u);}catch(e){}}
+async function keepAwake(on){try{if(on&&!wake&&navigator.wakeLock){wake=await navigator.wakeLock.request('screen');wake.addEventListener('release',()=>wake=null);}if(!on&&wake){await wake.release();wake=null;}}catch(e){}}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&D.run)keepAwake(true);});
+document.addEventListener('touchend',()=>audio(),{once:true,passive:true});
+
+/* ===================== Treino guiado ===================== */
+function cur(){const r=D.run,w=WORKOUTS[r.wid];return {r,w,e:w.ex[r.idx]};}
+function exSpeech(w,e,r){return `${e.name}. ${e.reps} ${e.unit}${e.note?', '+e.note:''}.${e.kg?' Com o halter de '+String(D.kg[e.id]||e.kg).replace('.',',')+' quilos.':''}`;}
+function start(wid){
+  audio(); keepAwake(true);
+  D.run={wid,round:1,idx:0,phase:'ex',start:Date.now(),count:0,used:{}}; save(); view='run'; render();
+  const {w,e}=cur(); say(`Vamos lá! Treino de ${w.name}. Primeiro exercício: ${exSpeech(w,e)}`); window.scrollTo(0,0);
+}
+function nextPos(){const {r,w}=cur();if(r.idx<w.ex.length-1)return {round:r.round,idx:r.idx+1,newRound:false};if(r.round<w.rounds)return {round:r.round+1,idx:0,newRound:true};return null;}
+function doneEx(){
+  const {r,w,e}=cur(); if(e.kg) r.used[e.id]=D.kg[e.id]||e.kg;
+  const n=nextPos(); beep(1046,.15);
+  if(!n) return finish();
+  const secs=n.newRound?D.settings.restRound:D.settings.restEx;
+  r.next=n; r.count=0;
+  if(secs<=0){goNext();return;}
+  r.phase='rest'; r.restEnd=Date.now()+secs*1000; save(); render(); window.scrollTo(0,0);
+  const ne=w.ex[n.idx];
+  say(n.newRound?`Muito bem! Volta ${r.round} terminada. Descansa um minuto. A seguir: ${ne.name}.`:`Boa! Descansa. A seguir: ${ne.name}.`);
+}
+function goNext(){const {r,w}=cur();Object.assign(r,{round:r.next.round,idx:r.next.idx,phase:'ex'});delete r.next;delete r.restEnd;save();render();window.scrollTo(0,0);const {e}=cur();beep(1318,.3);say(exSpeech(w,e));}
+function finish(){
+  const {r,w}=cur(); const dur=Math.max(1,Math.round((Date.now()-r.start)/60000));
+  D.history.unshift({d:new Date().toISOString(),wid:r.wid,dur,used:r.used}); D.run=null; save(); keepAwake(false);
+  view='done'; render(); window.scrollTo(0,0); say(`Parabéns! Treino de ${w.name} concluído. Ótimo trabalho!`);
+  [784,988,1175,1568].forEach((f,i)=>setTimeout(()=>beep(f,.18),i*160));
+}
+setInterval(()=>{
+  const r=D.run; if(!r||r.phase!=='rest'||view!=='run')return;
+  const rem=Math.ceil((r.restEnd-Date.now())/1000);
+  const el=$('#rt'); if(el){el.textContent=rem>59?Math.floor(rem/60)+':'+String(rem%60).padStart(2,'0'):Math.max(0,rem);
+    const tot=r.next&&r.next.newRound?D.settings.restRound:D.settings.restEx; const c=$('#arc'); if(c)c.style.strokeDashoffset=String(628*(1-Math.max(0,rem)/tot));}
+  if(rem<=3&&rem>0&&lastBeep!==rem){lastBeep=rem;beep(660,.12);}
+  if(rem<=0){lastBeep=null;goNext();}
+},250);
+
+/* ===================== Ecrãs ===================== */
+function render(){$('#app').innerHTML=({home:vHome,run:vRun,done:vDone,list:vList,hist:vHist,settings:vSettings})[view]();}
+
+function weekDots(){
+  const now=new Date(),mon=new Date(now);mon.setHours(0,0,0,0);mon.setDate(mon.getDate()-((mon.getDay()+6)%7));
+  const days=['S','T','Q','Q','S','S','D'];
+  return days.map((l,i)=>{const d=new Date(mon);d.setDate(d.getDate()+i);const key=d.toDateString();
+    const did=D.history.some(h=>new Date(h.d).toDateString()===key);const today=key===now.toDateString();
+    return `<div class="day"><div class="dot ${did?'on':''} ${today?'today':''}">${did?'✓':''}</div>${l}</div>`;}).join('');
+}
+function vHome(){
+  const h=new Date().getHours(), greet=h<12?'Bom dia':h<20?'Boa tarde':'Boa noite';
+  const wk=D.history.filter(x=>Date.now()-new Date(x.d)<7*864e5).length;
+  const last=D.history[0];
+  return `<div class="top"><div class="logo">Bora Mexer!</div><button class="iconbtn" data-a="settings" aria-label="Definições">⚙️</button></div>
+  <div class="hello">${greet}! Qual é o treino de hoje?</div>
+  ${Object.entries(WORKOUTS).map(([id,w])=>`<div class="wcard ${w.cls}" data-a="start" data-w="${id}" role="button">
+    <div class="em">${w.emoji}</div><h2>${w.name}</h2><p>${w.sub}</p><span class="go">▶ Começar</span>
+    <button class="peek" data-a="list" data-w="${id}">Ver exercícios</button></div>`).join('')}
+  <div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><h3>Esta semana</h3><span class="badge">${wk} ${wk===1?'treino':'treinos'}</span></div>
+    <div class="week">${weekDots()}</div>
+    ${last?`<p class="muted small" style="margin:12px 0 0">Último: ${WORKOUTS[last.wid].name}, ${new Date(last.d).toLocaleDateString('pt-PT',{weekday:'long',day:'numeric',month:'long'})}.</p>`:'<p class="muted small" style="margin:12px 0 0">Ainda não fizeste nenhum treino. Bora começar? 💪</p>'}
+  </div>
+  ${D.history.length?`<button class="ghost" data-a="hist">📅 Ver todos os treinos</button>`:''}`;
+}
+function vRun(){
+  const {r,w,e}=cur(); const total=w.ex.length*w.rounds, doneN=(r.round-1)*w.ex.length+r.idx+(r.phase==='rest'?1:0);
+  const head=`<div class="runhead"><button class="iconbtn" data-a="quit" aria-label="Sair">✕</button><div class="prog"><i style="width:${doneN/total*100}%"></i></div><span class="badge">Volta ${r.next&&r.phase==='rest'?r.next.round:r.round}/${w.rounds}</span></div>`;
+  if(r.phase==='rest'){
+    const ne=w.ex[r.next.idx], tot=r.next.newRound?D.settings.restRound:D.settings.restEx;
+    return head+`<div class="rest"><h1 style="margin:10px 0 0;font-size:30px">${r.next.newRound?'Volta '+r.round+' feita! 🎉':'Descansa um pouco 😌'}</h1>
+      <div class="ring"><svg viewBox="0 0 220 220"><circle cx="110" cy="110" r="100" fill="none" stroke="#f1e2d8" stroke-width="16"/><circle id="arc" cx="110" cy="110" r="100" fill="none" stroke="#ff4f6d" stroke-width="16" stroke-linecap="round" stroke-dasharray="628" stroke-dashoffset="0"/></svg>
+      <div class="t"><b id="rt">${tot}</b><span class="muted">segundos</span></div></div>
+      <div class="next"><img src="${img(ne.id,0)}" alt=""><div><div class="muted small">A seguir</div><div style="font-weight:900;font-size:21px">${ne.name}</div><div class="small">${ne.reps} ${ne.unit}${ne.note?' · '+ne.note:''}</div></div></div>
+      <div class="row2" style="margin-top:12px"><button class="ghost" data-a="more">+15 seg</button><button class="ghost" data-a="skip" style="border-color:var(--teal);color:#007a71">Já estou pronta ▶</button></div></div>`;
+  }
+  const k=D.kg[e.id]||e.kg;
+  return head+`<div class="muted small">Exercício ${r.idx+1} de ${w.ex.length}</div>
+    ${photo(e,e.imgs>1?'Início ↔ Fim':'')}
+    <div class="exname">${e.name}</div>
+    <div class="reps"><b>${e.reps}</b><span>${e.unit}</span>${e.note?`<span class="muted" style="font-weight:600;font-size:17px">(${e.note})</span>`:''}</div>
+    ${e.kg?`<div class="kg">${KG_OPTS.map(o=>`<button class="${o===k?'on':''}" data-a="kg" data-k="${o}">🏋️ ${kgTxt(o)}</button>`).join('')}</div>`:''}
+    <button class="counter" data-a="count">${r.count?`Contagem: ${r.count} / ${e.reps}`:'Toca aqui a cada repetição para contar'}</button>
+    <button class="big" data-a="done">Feito! ✓</button>
+    <div class="card" style="margin-top:16px"><h3>Como fazer</h3><ol class="steps">${e.steps.map(s=>`<li>${s}</li>`).join('')}</ol><div class="tip">💡 ${e.tip}</div>
+    <button class="ghost" data-a="sayhow">🔊 Ouvir a explicação</button></div>`;
+}
+function vDone(){
+  const h=D.history[0], w=WORKOUTS[h.wid];
+  const msgs=['Estás a arrasar!','Que orgulho!','Mais um feito!','Excelente trabalho!'];
+  return `<div class="done"><div class="em">🏆</div><h1>${msgs[D.history.length%msgs.length]}</h1>
+  <p class="muted">Treino de ${w.name} concluído.</p>
+  <div class="stats"><div><b>${h.dur}</b>minutos</div><div><b>${w.rounds}</b>voltas</div><div><b>${D.history.filter(x=>Date.now()-new Date(x.d)<7*864e5).length}</b>esta semana</div></div>
+  <button class="big" data-a="home">Voltar ao início</button></div>`;
+}
+function vList(){
+  const w=WORKOUTS[peek];
+  return `<div class="top"><button class="iconbtn" data-a="home">←</button><div class="logo" style="font-size:24px">${w.emoji} ${w.name}</div><span style="width:46px"></span></div>
+  <p class="muted">${w.sub}. Toca num exercício para veres como se faz.</p>
+  <div class="card">${w.ex.map((e,i)=>`<div class="exrow" data-a="detail" data-i="${i}" role="button"><img src="${img(e.id,0)}" alt=""><div><div style="font-weight:800">${i+1}. ${e.name}</div><div class="muted small">${e.reps} ${e.unit}${e.note?' · '+e.note:''}${e.kg?' · '+kgTxt(D.kg[e.id]||e.kg):''}</div></div></div>`).join('')}</div>
+  <button class="big" data-a="start" data-w="${peek}">▶ Começar treino</button>`;
+}
+function vHist(){
+  return `<div class="top"><button class="iconbtn" data-a="home">←</button><div class="logo" style="font-size:24px">Os meus treinos</div><span style="width:46px"></span></div>
+  <div class="card">${D.history.map(h=>`<div class="hist"><div><b>${WORKOUTS[h.wid].emoji} ${WORKOUTS[h.wid].name}</b><div class="muted small">${new Date(h.d).toLocaleDateString('pt-PT',{weekday:'long',day:'numeric',month:'long'})}</div></div><div class="muted small" style="text-align:right">${h.dur} min${h.used&&Object.keys(h.used).length?'<br>'+[...new Set(Object.values(h.used))].map(kgTxt).join(' / '):''}</div></div>`).join('')}</div>`;
+}
+function vSettings(){
+  const s=D.settings, sel=(k,opts)=>`<select data-s="${k}">${opts.map(o=>`<option value="${o}" ${s[k]==o?'selected':''}>${o===0?'Sem descanso':o+' seg'}</option>`).join('')}</select>`;
+  return `<div class="top"><button class="iconbtn" data-a="home">←</button><div class="logo" style="font-size:24px">Definições</div><span style="width:46px"></span></div>
+  <div class="card">
+    <div class="toggle"><span>Descanso entre exercícios</span>${sel('restEx',[0,15,20,30,45,60])}</div>
+    <div class="toggle"><span>Descanso entre voltas</span>${sel('restRound',[30,60,90,120])}</div>
+    <div class="toggle"><span>Voz a guiar o treino</span><select data-s="voice"><option value="1" ${s.voice?'selected':''}>Ligada</option><option value="0" ${!s.voice?'selected':''}>Desligada</option></select></div>
+    <div class="toggle"><span>Sons</span><select data-s="sound"><option value="1" ${s.sound?'selected':''}>Ligados</option><option value="0" ${!s.sound?'selected':''}>Desligados</option></select></div>
+  </div>
+  <div class="card"><h3>Cópia de segurança</h3><p class="muted small">Os treinos ficam guardados só neste telemóvel.</p>
+    <button class="ghost" data-a="backup">Copiar cópia de segurança</button><button class="ghost" data-a="restore">Restaurar cópia</button></div>
+  <p class="credit">Fotos dos exercícios: Free Exercise DB (domínio público). Estas fotos servem para mostrar o movimento. Se sentires dor, para e fala com o teu médico.</p>`;
+}
+
+/* ===================== Interação ===================== */
+function modal(html){$('#modal').innerHTML=`<div class="modal" data-a="mclose"><div class="box">${html}</div></div>`;}
+const A={
+  start:el=>start(el.dataset.w),
+  list:(el,ev)=>{ev.stopPropagation();peek=el.dataset.w;view='list';render();window.scrollTo(0,0);},
+  detail:el=>{const e=WORKOUTS[peek].ex[+el.dataset.i];modal(`${photo(e,e.imgs>1?'Início ↔ Fim':'')}<div class="exname" style="font-size:24px">${e.name}</div><div class="small"><b>${e.reps} ${e.unit}</b>${e.note?' · '+e.note:''}</div><ol class="steps">${e.steps.map(s=>`<li>${s}</li>`).join('')}</ol><div class="tip">💡 ${e.tip}</div><button class="big" data-a="mclose">Percebi!</button>`);},
+  mclose:(el,ev)=>{if(ev.target===el||el.tagName==='BUTTON')$('#modal').innerHTML='';},
+  home:()=>{view='home';render();window.scrollTo(0,0);},
+  hist:()=>{view='hist';render();window.scrollTo(0,0);},
+  settings:()=>{view='settings';render();window.scrollTo(0,0);},
+  done:()=>doneEx(),
+  count:()=>{const {r,e}=cur();r.count++;beep(r.count>=e.reps?1318:880,.08,.2);save();$('[data-a=count]').textContent=`Contagem: ${r.count} / ${e.reps}${r.count>=e.reps?' ✓':''}`;if(r.count===e.reps)say('Feito!');},
+  kg:el=>{const {e}=cur();D.kg[e.id]=+el.dataset.k;save();render();},
+  sayhow:()=>{const {e}=cur();say(e.name+'. '+e.steps.join(' ')+' '+e.tip);},
+  more:()=>{D.run.restEnd+=15000;save();},
+  skip:()=>{lastBeep=null;goNext();},
+  quit:()=>modal(`<h2 style="margin-top:0">Sair do treino?</h2><p class="muted">O treino de hoje não fica guardado.</p><div class="row2"><button class="ghost" data-a="mclose">Continuar</button><button class="ghost" data-a="quityes" style="color:var(--coral);border-color:var(--coral)">Sair</button></div>`),
+  quityes:()=>{D.run=null;save();keepAwake(false);try{speechSynthesis.cancel()}catch(e){}$('#modal').innerHTML='';view='home';render();},
+  backup:async()=>{try{await navigator.clipboard.writeText(JSON.stringify({app:'boramexer',history:D.history,kg:D.kg,settings:D.settings}));modal('<h2 style="margin-top:0">Copiado ✓</h2><p>Cola o texto numa nota ou envia-o a ti própria por mensagem para o guardares.</p><button class="big" data-a="mclose">OK</button>');}catch(e){}},
+  restore:()=>modal(`<h2 style="margin-top:0">Restaurar</h2><textarea id="rs" rows="5" style="width:100%;font:inherit;font-size:15px;border:2px solid var(--line);border-radius:12px;padding:8px" placeholder="Cola aqui a cópia de segurança"></textarea><div class="row2"><button class="ghost" data-a="mclose">Cancelar</button><button class="ghost" data-a="restoreyes">Restaurar</button></div>`),
+  restoreyes:()=>{try{const d=JSON.parse($('#rs').value);if(d.history)D.history=d.history;if(d.kg)D.kg=d.kg;if(d.settings)D.settings=Object.assign(D.settings,d.settings);save();$('#modal').innerHTML='';render();}catch(e){alert('O texto não é válido.');}}
+};
+document.addEventListener('click',ev=>{const el=ev.target.closest('[data-a]');if(!el)return;const f=A[el.dataset.a];if(f)f(el,ev);});
+document.addEventListener('change',ev=>{const k=ev.target.dataset.s;if(!k)return;const v=ev.target.value;D.settings[k]=(k==='voice'||k==='sound')?v==='1':+v;save();});
+if('speechSynthesis' in window){try{speechSynthesis.getVoices();speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices();}catch(e){}}
+
+render();
+if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'))window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+</script>
+</body>
+</html>
