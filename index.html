@@ -73,7 +73,7 @@ ol.steps{padding-left:22px;margin:8px 0}ol.steps li{margin:6px 0}
 /* list */
 .exrow{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:2px solid var(--line)}.exrow:last-child{border:0}
 .exrow img{width:96px;height:66px;object-fit:cover;border-radius:12px;flex:none}
-.hist{display:flex;justify-content:space-between;padding:10px 0;border-bottom:2px solid var(--line)}.hist:last-child{border:0}
+.hist{display:flex;align-items:center;gap:8px;justify-content:space-between;padding:10px 0;border-bottom:2px solid var(--line)}.hist:last-child{border:0}.hist>div:first-child{flex:1}
 .modal{position:fixed;inset:0;background:rgba(31,26,46,.55);display:flex;align-items:center;justify-content:center;padding:20px;z-index:20}
 .modal .box{background:#fff;border-radius:24px;padding:20px;max-width:420px;width:100%}
 .toggle{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:2px solid var(--line)}
@@ -143,7 +143,7 @@ function photo(e,label){return `<div class="photo"><img src="${img(e.id,0)}" alt
 /* ===================== Som, voz, ecrã ===================== */
 function audio(){try{const AC=window.AudioContext||window.webkitAudioContext;if(!ac&&AC)ac=new AC();if(ac&&ac.state==='suspended')ac.resume();}catch(e){}return ac;}
 function beep(f=880,d=.18,v=.35){if(!D.settings.sound)return;const a=audio();if(!a)return;try{const o=a.createOscillator(),g=a.createGain();o.frequency.value=f;g.gain.setValueAtTime(.0001,a.currentTime);g.gain.exponentialRampToValueAtTime(v,a.currentTime+.02);g.gain.exponentialRampToValueAtTime(.0001,a.currentTime+d);o.connect(g);g.connect(a.destination);o.start();o.stop(a.currentTime+d+.05);}catch(e){}}
-function say(t){if(!D.settings.voice||!('speechSynthesis' in window))return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='pt-PT';u.rate=.95;const v=speechSynthesis.getVoices().find(v=>v.lang==='pt-PT')||speechSynthesis.getVoices().find(v=>v.lang&&v.lang.startsWith('pt'));if(v)u.voice=v;speechSynthesis.speak(u);}catch(e){}}
+function say(t){return;if(!('speechSynthesis' in window))return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='pt-PT';u.rate=.95;const v=speechSynthesis.getVoices().find(v=>v.lang==='pt-PT')||speechSynthesis.getVoices().find(v=>v.lang&&v.lang.startsWith('pt'));if(v)u.voice=v;speechSynthesis.speak(u);}catch(e){}}
 async function keepAwake(on){try{if(on&&!wake&&navigator.wakeLock){wake=await navigator.wakeLock.request('screen');wake.addEventListener('release',()=>wake=null);}if(!on&&wake){await wake.release();wake=null;}}catch(e){}}
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&D.run)keepAwake(true);});
 document.addEventListener('touchend',()=>audio(),{once:true,passive:true});
@@ -226,10 +226,8 @@ function vRun(){
     <div class="exname">${e.name}</div>
     <div class="reps"><b>${e.reps}</b><span>${e.unit}</span>${e.note?`<span class="muted" style="font-weight:600;font-size:17px">(${e.note})</span>`:''}</div>
     ${e.kg?`<div class="kg">${KG_OPTS.map(o=>`<button class="${o===k?'on':''}" data-a="kg" data-k="${o}">🏋️ ${kgTxt(o)}</button>`).join('')}</div>`:''}
-    <button class="counter" data-a="count">${r.count?`Contagem: ${r.count} / ${e.reps}`:'Toca aqui a cada repetição para contar'}</button>
     <button class="big" data-a="done">Feito! ✓</button>
-    <div class="card" style="margin-top:16px"><h3>Como fazer</h3><ol class="steps">${e.steps.map(s=>`<li>${s}</li>`).join('')}</ol><div class="tip">💡 ${e.tip}</div>
-    <button class="ghost" data-a="sayhow">🔊 Ouvir a explicação</button></div>`;
+    <div class="card" style="margin-top:16px"><h3>Como fazer</h3><ol class="steps">${e.steps.map(s=>`<li>${s}</li>`).join('')}</ol><div class="tip">💡 ${e.tip}</div></div>`;
 }
 function vDone(){
   const h=D.history[0], w=WORKOUTS[h.wid];
@@ -248,7 +246,8 @@ function vList(){
 }
 function vHist(){
   return `<div class="top"><button class="iconbtn" data-a="home">←</button><div class="logo" style="font-size:24px">Os meus treinos</div><span style="width:46px"></span></div>
-  <div class="card">${D.history.map(h=>`<div class="hist"><div><b>${WORKOUTS[h.wid].emoji} ${WORKOUTS[h.wid].name}</b><div class="muted small">${new Date(h.d).toLocaleDateString('pt-PT',{weekday:'long',day:'numeric',month:'long'})}</div></div><div class="muted small" style="text-align:right">${h.dur} min${h.used&&Object.keys(h.used).length?'<br>'+[...new Set(Object.values(h.used))].map(kgTxt).join(' / '):''}</div></div>`).join('')}</div>`;
+  ${D.history.length?'':'<div class="card muted">Ainda não há treinos registados.</div>'}
+  ${D.history.length?`<div class="card">${D.history.map((h,i)=>`<div class="hist"><div><b>${WORKOUTS[h.wid].emoji} ${WORKOUTS[h.wid].name}</b><div class="muted small">${new Date(h.d).toLocaleDateString('pt-PT',{weekday:'long',day:'numeric',month:'long'})}</div></div><div class="muted small" style="text-align:right">${h.dur} min${h.used&&Object.keys(h.used).length?'<br>'+[...new Set(Object.values(h.used))].map(kgTxt).join(' / '):''}</div><button class="iconbtn" data-a="delh" data-i="${i}" aria-label="Eliminar" style="margin-left:10px;flex:none">🗑️</button></div>`).join('')}</div>`:''}`;
 }
 function vSettings(){
   const s=D.settings, sel=(k,opts)=>`<select data-s="${k}">${opts.map(o=>`<option value="${o}" ${s[k]==o?'selected':''}>${o===0?'Sem descanso':o+' seg'}</option>`).join('')}</select>`;
@@ -256,7 +255,6 @@ function vSettings(){
   <div class="card">
     <div class="toggle"><span>Descanso entre exercícios</span>${sel('restEx',[0,15,20,30,45,60])}</div>
     <div class="toggle"><span>Descanso entre voltas</span>${sel('restRound',[30,60,90,120])}</div>
-    <div class="toggle"><span>Voz a guiar o treino</span><select data-s="voice"><option value="1" ${s.voice?'selected':''}>Ligada</option><option value="0" ${!s.voice?'selected':''}>Desligada</option></select></div>
     <div class="toggle"><span>Sons</span><select data-s="sound"><option value="1" ${s.sound?'selected':''}>Ligados</option><option value="0" ${!s.sound?'selected':''}>Desligados</option></select></div>
   </div>
   <div class="card"><h3>Cópia de segurança</h3><p class="muted small">Os treinos ficam guardados só neste telemóvel.</p>
@@ -275,11 +273,11 @@ const A={
   hist:()=>{view='hist';render();window.scrollTo(0,0);},
   settings:()=>{view='settings';render();window.scrollTo(0,0);},
   done:()=>doneEx(),
-  count:()=>{const {r,e}=cur();r.count++;beep(r.count>=e.reps?1318:880,.08,.2);save();$('[data-a=count]').textContent=`Contagem: ${r.count} / ${e.reps}${r.count>=e.reps?' ✓':''}`;if(r.count===e.reps)say('Feito!');},
   kg:el=>{const {e}=cur();D.kg[e.id]=+el.dataset.k;save();render();},
-  sayhow:()=>{const {e}=cur();say(e.name+'. '+e.steps.join(' ')+' '+e.tip);},
   more:()=>{D.run.restEnd+=15000;save();},
   skip:()=>{lastBeep=null;goNext();},
+  delh:el=>{const i=+el.dataset.i,h=D.history[i];modal(`<h2 style="margin-top:0">Eliminar este treino?</h2><p class="muted">${WORKOUTS[h.wid].emoji} ${WORKOUTS[h.wid].name}, ${new Date(h.d).toLocaleDateString('pt-PT',{weekday:'long',day:'numeric',month:'long'})}</p><div class="row2"><button class="ghost" data-a="mclose">Cancelar</button><button class="ghost" data-a="delhyes" data-i="${i}" style="color:var(--coral);border-color:var(--coral)">Eliminar</button></div>`);},
+  delhyes:el=>{D.history.splice(+el.dataset.i,1);save();$('#modal').innerHTML='';render();},
   quit:()=>modal(`<h2 style="margin-top:0">Sair do treino?</h2><p class="muted">O treino de hoje não fica guardado.</p><div class="row2"><button class="ghost" data-a="mclose">Continuar</button><button class="ghost" data-a="quityes" style="color:var(--coral);border-color:var(--coral)">Sair</button></div>`),
   quityes:()=>{D.run=null;save();keepAwake(false);try{speechSynthesis.cancel()}catch(e){}$('#modal').innerHTML='';view='home';render();},
   backup:async()=>{try{await navigator.clipboard.writeText(JSON.stringify({app:'boramexer',history:D.history,kg:D.kg,settings:D.settings}));modal('<h2 style="margin-top:0">Copiado ✓</h2><p>Cola o texto numa nota ou envia-o a ti própria por mensagem para o guardares.</p><button class="big" data-a="mclose">OK</button>');}catch(e){}},

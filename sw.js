@@ -1,5 +1,5 @@
 // Bora Mexer! service worker: funciona offline (inclui as fotos) e atualiza-se sozinho.
-const CACHE='boramexer-v2';
+const CACHE='boramexer-v3';
 const SHELL=["./", "./index.html", "./manifest.json", "./icons/icon-192.png", "./icons/apple-touch-icon.png", "./img/agachamento-0.jpg", "./img/agachamento-1.jpg", "./img/calcanhar-rabo-0.jpg", "./img/calcanhar-rabo-1.jpg", "./img/curl-0.jpg", "./img/curl-1.jpg", "./img/elevacao-pelvica-0.jpg", "./img/elevacao-pelvica-1.jpg", "./img/escadas-0.jpg", "./img/escadas-1.jpg", "./img/flexoes-0.jpg", "./img/flexoes-1.jpg", "./img/joelho-chao-0.jpg", "./img/joelho-chao-1.jpg", "./img/joelho-peito-0.jpg", "./img/press-ombros-0.jpg", "./img/press-ombros-1.jpg", "./img/remada-0.jpg", "./img/remada-1.jpg", "./img/triceps-0.jpg", "./img/triceps-1.jpg"];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
